@@ -78,4 +78,8 @@ jobs:
           script_stop: true   # Abort the SSH session on the first failing command.
           script: |
             set -euo pipefail
+            # Bootstrap: clone the repository on first deploy if it doesn't exist yet.
+            if [ ! -d "${HOME}/portage/.git" ]; then
+              git clone https://github.com/IngeniousDevelopersINDEV/portage.git "${HOME}/portage"
+            fi
             bash ~/portage/scripts/deploy.sh
