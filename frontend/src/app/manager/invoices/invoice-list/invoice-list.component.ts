@@ -4,13 +4,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { InvoiceService, Invoice } from '../../../../core/services/invoice.service';
+import { InvoiceService, Invoice } from '../../../core/services/invoice.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
 @Component({ selector: 'app-invoice-list', templateUrl: './invoice-list.component.html' })
 export class InvoiceListComponent implements OnInit, OnDestroy {
-  displayedColumns = ['invoiceNumber', 'consultant', 'client', 'totalHT', 'totalTTC', 'status', 'dueDate', 'actions'];
+  displayedColumns = ['invoiceNumber', 'consultant', 'client', 'amountHT', 'amountTTC', 'status', 'dueDate', 'actions'];
   dataSource = new MatTableDataSource<Invoice>();
   loading = true;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -25,7 +25,7 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
 
   load(): void {
     this.invoiceService.getAll().pipe(takeUntil(this.destroy$)).subscribe({
-      next: d => { this.dataSource.data = d; this.loading = false; },
+      next: d => { this.dataSource.data = d.content; this.loading = false; },
       error: () => this.loading = false
     });
   }
@@ -37,7 +37,8 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
   }
 
   markPaid(id: number): void {
-    this.invoiceService.markPaid(id).pipe(takeUntil(this.destroy$)).subscribe(() => {
+    const paidDate = new Date().toISOString().split('T')[0];
+    this.invoiceService.markPaid(id, paidDate).pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.snack.open('Facture marquée payée', 'OK', { duration: 3000 }); this.load();
     });
   }

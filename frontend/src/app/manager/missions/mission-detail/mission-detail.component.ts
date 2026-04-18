@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MissionService } from '../../../../core/services/mission.service';
-import { ConsultantService } from '../../../../core/services/consultant.service';
-import { ClientService } from '../../../../core/services/client.service';
+import { MissionService } from '../../../core/services/mission.service';
+import { ConsultantService, Consultant } from '../../../core/services/consultant.service';
+import { ClientService, Client } from '../../../core/services/client.service';
 
 @Component({
   selector: 'app-mission-detail',
@@ -14,8 +14,8 @@ export class MissionDetailComponent implements OnInit {
   form: FormGroup;
   id: number | null = null;
   loading = false;
-  consultants: any[] = [];
-  clients: any[] = [];
+  consultants: Consultant[] = [];
+  clients: Client[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -39,8 +39,8 @@ export class MissionDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.consultantService.getAll().subscribe(d => this.consultants = d);
-    this.clientService.getAll().subscribe(d => this.clients = d);
+    this.consultantService.getAll().subscribe(d => this.consultants = d.content);
+    this.clientService.getAll().subscribe(d => this.clients = d.content);
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam && idParam !== 'new') {
       this.id = +idParam;

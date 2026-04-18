@@ -1,3 +1,4 @@
+// ─── Default layout styles ─────────────────────────────────────────────────
 .sidenav-container { height: 100vh; }
 .sidenav { width: 260px; background: #1565C0; color: white; }
 .sidenav-header { display: flex; align-items: center; gap: 12px; padding: 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.15); }
@@ -9,3 +10,79 @@ mat-nav-list a:hover, mat-nav-list a.active-link { background: rgba(255,255,255,
 .toolbar-spacer { flex: 1; }
 .user-btn { display: flex; align-items: center; gap: 8px; }
 .content-area { padding: 24px; background: #F5F5F5; min-height: calc(100vh - 64px); }
+
+// ─── Glass toggle widget ────────────────────────────────────────────────────
+.glass-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  .toggle-icon { font-size: 18px; width: 18px; height: 18px; color: #9e9e9e; transition: color 0.3s; }
+  .toggle-label { font-size: 13px; font-weight: 500; color: #616161; }
+  &.active {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.25);
+    .toggle-icon { color: #6366f1; }
+    .toggle-label { color: #6366f1; }
+  }
+}
+
+// ─── Glassmorphism mode overrides ───────────────────────────────────────────
+.glass-mode {
+  // Gradient background visible through glass elements
+  &.sidenav-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
+  }
+
+  // Sidebar glass
+  .sidenav {
+    background: rgba(21, 101, 192, 0.25) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidenav-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  mat-nav-list a {
+    color: rgba(255, 255, 255, 0.9);
+    transition: background 0.2s ease;
+    &:hover, &.active-link {
+      background: rgba(255, 255, 255, 0.18);
+      color: white;
+    }
+  }
+
+  // Toolbar glass
+  .app-toolbar {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: white;
+
+    button, mat-icon { color: rgba(255, 255, 255, 0.9); }
+    span { color: rgba(255, 255, 255, 0.9); }
+    .toggle-icon { color: #a5b4fc; }
+    .toggle-label { color: #c7d2fe; }
+    .glass-toggle-wrap.active {
+      background: rgba(165, 180, 252, 0.1);
+      border-color: rgba(165, 180, 252, 0.3);
+    }
+  }
+
+  // Content area with subtle background
+  .content-area {
+    background: transparent;
+    min-height: calc(100vh - 64px);
+  }
+}
+

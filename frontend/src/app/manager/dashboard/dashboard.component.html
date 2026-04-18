@@ -6,8 +6,8 @@
     <app-kpi-card label="CA mensuel" [value]="formatCurrency(stats.monthlyRevenue)" icon="euro" color="#FF6F00"></app-kpi-card>
     <app-kpi-card label="Factures en attente" [value]="stats.pendingInvoices" icon="receipt" color="#C62828"></app-kpi-card>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-    <mat-card>
+  <div class="dashboard-grid">
+    <mat-card class="dashboard-card">
       <mat-card-header><mat-card-title>Factures récentes</mat-card-title></mat-card-header>
       <mat-card-content>
         <table mat-table [dataSource]="stats.recentInvoices" class="full-width">
@@ -23,7 +23,7 @@
         <p *ngIf="!stats.recentInvoices?.length" class="no-data">Aucune facture récente</p>
       </mat-card-content>
     </mat-card>
-    <mat-card>
+    <mat-card class="dashboard-card">
       <mat-card-header><mat-card-title>Missions se terminant bientôt</mat-card-title></mat-card-header>
       <mat-card-content>
         <table mat-table [dataSource]="stats.endingSoonMissions" class="full-width">

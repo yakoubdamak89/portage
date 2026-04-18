@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { InvoiceService, Invoice } from '../../../../core/services/invoice.service';
-import { PaymentService } from '../../../../core/services/payment.service';
+import { InvoiceService, Invoice } from '../../../core/services/invoice.service';
+import { PaymentService } from '../../../core/services/payment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 

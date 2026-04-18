@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TimesheetService, Timesheet } from '../../../core/services/timesheet.service';
+import { TimesheetService, Timesheet } from '../../core/services/timesheet.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

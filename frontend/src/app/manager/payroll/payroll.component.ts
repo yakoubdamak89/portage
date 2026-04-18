@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PayslipService } from '../../../core/services/payslip.service';
+import { PayslipService, Payslip } from '../../core/services/payslip.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({ selector: 'app-payroll', templateUrl: './payroll.component.html' })
 export class PayrollComponent implements OnInit, OnDestroy {
   displayedColumns = ['consultant', 'period', 'grossSalary', 'netSalary', 'status', 'actions'];
-  dataSource = new MatTableDataSource<any>();
+  dataSource = new MatTableDataSource<Payslip>();
   loading = true;
   private destroy$ = new Subject<void>();
 
@@ -16,7 +16,7 @@ export class PayrollComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.payslipService.getAll().pipe(takeUntil(this.destroy$)).subscribe({
-      next: d => { this.dataSource.data = d; this.loading = false; },
+      next: d => { this.dataSource.data = d.content; this.loading = false; },
       error: () => this.loading = false
     });
   }
