@@ -80,6 +80,6 @@ jobs:
             set -euo pipefail
             # Bootstrap: clone the repository on first deploy if it doesn't exist yet.
             if [ ! -d "${HOME}/portage/.git" ]; then
-              git clone https://github.com/IngeniousDevelopersINDEV/portage.git "${HOME}/portage"
+              GIT_TERMINAL_PROMPT=0 git clone https://github.com/IngeniousDevelopersINDEV/portage.git "${HOME}/portage"
             fi
             bash ~/portage/scripts/deploy.sh
