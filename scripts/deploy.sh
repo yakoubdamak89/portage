@@ -13,10 +13,37 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 COMPOSE_FILE="${REPO_DIR}/docker-compose.yml"
+ENV_FILE="${REPO_DIR}/.env"
 
 echo "──────────────────────────────────────────────────────────────"
 echo "  Portage – Deployment started at $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 echo "──────────────────────────────────────────────────────────────"
+
+# ── 0. Preflight: verify the .env file exists and required vars are set ───────
+if [ ! -f "${ENV_FILE}" ]; then
+  echo "ERROR: ${ENV_FILE} not found."
+  echo "       Create it from the example and fill in the required values:"
+  echo "         cp ${REPO_DIR}/.env.example ${ENV_FILE}"
+  echo "         nano ${ENV_FILE}   # set POSTGRES_PASSWORD, JWT_SECRET, …"
+  exit 1
+fi
+
+_missing=()
+for _var in POSTGRES_PASSWORD JWT_SECRET; do
+  _val="$(grep -E "^${_var}=" "${ENV_FILE}" | cut -d'=' -f2-)"
+  if [ -z "${_val}" ] || echo "${_val}" | grep -qi "^CHANGE_ME"; then
+    _missing+=("${_var}")
+  fi
+done
+
+if [ "${#_missing[@]}" -gt 0 ]; then
+  echo "ERROR: The following required variables are not set (or still hold placeholder values) in ${ENV_FILE}:"
+  for _var in "${_missing[@]}"; do
+    echo "         • ${_var}"
+  done
+  echo "       Edit ${ENV_FILE} and provide real values before deploying."
+  exit 1
+fi
 
 # ── 1. Rebuild and restart containers ────────────────────────────────────────
 echo "[1/3] Rebuilding Docker images and restarting containers …"
