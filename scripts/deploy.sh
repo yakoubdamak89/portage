@@ -20,7 +20,7 @@ echo "────────────────────────�
 # ── 1. Pull the latest code ───────────────────────────────────────────────────
 echo "[1/4] Pulling latest code from origin/main …"
 cd "${REPO_DIR}"
-git fetch origin main
+GIT_TERMINAL_PROMPT=0 git fetch origin main
 git reset --hard origin/main
 
 # ── 2. Rebuild and restart containers ────────────────────────────────────────
