@@ -53,12 +53,39 @@ Le pipeline se compose de deux jobs séquentiels :
 Rendez-vous dans **GitHub → votre dépôt → Settings → Secrets and variables →
 Actions → New repository secret** et ajoutez les secrets suivants :
 
+### Secrets d'infrastructure (connexion SSH au VPS)
+
 | Nom du secret | Description | Exemple |
 |---------------|-------------|---------|
 | `VPS_HOST` | Adresse IP ou nom de domaine du VPS | `203.0.113.10` ou `vps.mondomaine.fr` |
 | `VPS_PORT` | Port SSH du VPS | `22` (valeur par défaut) |
 | `VPS_USER` | Utilisateur SSH sur le VPS | `deploy` ou `ubuntu` |
 | `VPS_SSH_KEY` | Clé privée SSH (au format PEM complet, **avec** les lignes `-----BEGIN…-----`) | voir ci-dessous |
+| `VPS_DEPLOY_PATH` | Chemin absolu du répertoire de déploiement sur le VPS | `/home/deploy/portage` |
+
+### Secrets applicatifs (variables d'environnement)
+
+Ces secrets sont **automatiquement écrits dans le fichier `.env`** sur le VPS à chaque
+déploiement. Ils remplacent la configuration manuelle décrite dans `DEPLOY.md § 4`.
+
+| Nom du secret | Obligatoire | Description | Exemple |
+|---------------|-------------|-------------|---------|
+| `POSTGRES_PASSWORD` | ✅ | Mot de passe PostgreSQL | `M0tD3P@ss3Tr3sF0rt` |
+| `JWT_SECRET` | ✅ | Clé secrète JWT (min 32 caractères) | `openssl rand -base64 48` |
+| `JWT_EXPIRATION` | non | Durée JWT en ms | `86400000` (24 h, valeur par défaut) |
+| `POSTGRES_DB` | non | Nom de la base de données | `portagedb` (valeur par défaut) |
+| `POSTGRES_USER` | non | Utilisateur PostgreSQL | `portage` (valeur par défaut) |
+| `MAIL_HOST` | non | Serveur SMTP | `localhost` (valeur par défaut) |
+| `MAIL_PORT` | non | Port SMTP | `1025` (valeur par défaut) |
+| `MAIL_USERNAME` | non | Utilisateur SMTP | *(vide)* |
+| `MAIL_PASSWORD` | non | Mot de passe SMTP | *(vide)* |
+| `MAIL_SMTP_AUTH` | non | Authentification SMTP | `false` (valeur par défaut) |
+| `MAIL_SMTP_STARTTLS` | non | STARTTLS SMTP | `false` (valeur par défaut) |
+| `FRONTEND_PORT` | non | Port exposé par Nginx | `80` (valeur par défaut) |
+
+> **Important** : si `POSTGRES_PASSWORD` ou `JWT_SECRET` ne sont pas définis dans les
+> secrets GitHub, le pipeline **ne modifie pas** le `.env` existant sur le VPS. Si le
+> fichier n'existe pas encore, `deploy.sh` s'arrête avec une erreur explicite.
 
 ### Générer une paire de clés SSH dédiée au déploiement
 
@@ -141,7 +168,7 @@ Les erreurs les plus courantes :
 | Job **ci** échoue à `mvn package` | Erreur de compilation Java | Corriger le code et pousser un nouveau commit |
 | Job **ci** échoue à `npm run build` | Erreur TypeScript / Angular | Corriger le code et pousser un nouveau commit |
 | Job **deploy** échoue à la connexion SSH | Secret incorrect ou VPS inaccessible | Vérifier `VPS_HOST`, `VPS_PORT`, `VPS_USER`, `VPS_SSH_KEY` |
-| `deploy.sh` échoue avec `POSTGRES_PASSWORD is missing a value` | Le fichier `.env` est absent ou contient encore les valeurs d'exemple | Sur le VPS : `cp ~/portage/.env.example ~/portage/.env` puis renseigner `POSTGRES_PASSWORD` et `JWT_SECRET` |
+| `deploy.sh` échoue avec `POSTGRES_PASSWORD is missing a value` | Le fichier `.env` est absent ou contient encore les valeurs d'exemple | Vérifier que les secrets `POSTGRES_PASSWORD` et `JWT_SECRET` sont bien définis dans GitHub → Settings → Secrets |
 | `deploy.sh` échoue sur `docker compose up` | Erreur de build Docker sur le VPS | Voir les logs Docker ci-dessous |
 | Healthcheck backend timeout | Application ne démarre pas | Voir les logs backend ci-dessous |
 
@@ -201,16 +228,8 @@ Avant le premier déploiement automatique, s'assurer que le VPS est correctement
    ```bash
    git clone https://github.com/IngeniousDevelopersINDEV/portage.git ~/portage
    ```
-3. **Fichier `.env`** créé et configuré dans `~/portage/.env` :
-   ```bash
-   cp ~/portage/.env.example ~/portage/.env
-   nano ~/portage/.env  # renseigner POSTGRES_PASSWORD, JWT_SECRET, etc.
-   ```
+3. **Secrets GitHub configurés** (voir [§ 2](#2-secrets-à-configurer)) : le pipeline
+   crée/met à jour automatiquement `~/portage/.env` à chaque déploiement.
 4. **Clé publique SSH** de déploiement ajoutée à `~/.ssh/authorized_keys` (voir [§ 2](#2-secrets-à-configurer)).
-5. **Premier démarrage manuel** effectué au moins une fois pour créer les volumes et initialiser la BDD :
-   ```bash
-   cd ~/portage
-   docker compose up -d --build
-   ```
 
 Après ces étapes, chaque merge sur `main` déclenche automatiquement le redéploiement.

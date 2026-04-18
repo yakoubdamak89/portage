@@ -83,6 +83,52 @@ jobs:
           target:   "${{ secrets.VPS_DEPLOY_PATH }}"   # e.g. /home/user/portage
           rm:       false   # preserve server-side files not tracked in git (e.g. .env, uploads)
 
+      - name: Write .env file on VPS (from GitHub Secrets)
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          POSTGRES_DB:        ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER:      ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD:  ${{ secrets.POSTGRES_PASSWORD }}
+          JWT_SECRET:         ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION:     ${{ secrets.JWT_EXPIRATION }}
+          MAIL_HOST:          ${{ secrets.MAIL_HOST }}
+          MAIL_PORT:          ${{ secrets.MAIL_PORT }}
+          MAIL_USERNAME:      ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD:      ${{ secrets.MAIL_PASSWORD }}
+          MAIL_SMTP_AUTH:     ${{ secrets.MAIL_SMTP_AUTH }}
+          MAIL_SMTP_STARTTLS: ${{ secrets.MAIL_SMTP_STARTTLS }}
+          FRONTEND_PORT:      ${{ secrets.FRONTEND_PORT }}
+        with:
+          host:        ${{ secrets.VPS_HOST }}
+          port:        ${{ secrets.VPS_PORT }}
+          username:    ${{ secrets.VPS_USER }}
+          key:         ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          envs: POSTGRES_PASSWORD,JWT_SECRET,JWT_EXPIRATION,POSTGRES_DB,POSTGRES_USER,MAIL_HOST,MAIL_PORT,MAIL_USERNAME,MAIL_PASSWORD,MAIL_SMTP_AUTH,MAIL_SMTP_STARTTLS,FRONTEND_PORT
+          script: |
+            ENV_FILE="${{ secrets.VPS_DEPLOY_PATH }}/.env"
+            # Only (re)write if at least the required secrets are present.
+            if [ -n "${POSTGRES_PASSWORD}" ] && [ -n "${JWT_SECRET}" ]; then
+              cat > "${ENV_FILE}" <<EOF
+            POSTGRES_DB=${POSTGRES_DB:-portagedb}
+            POSTGRES_USER=${POSTGRES_USER:-portage}
+            POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            JWT_SECRET=${JWT_SECRET}
+            JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
+            MAIL_HOST=${MAIL_HOST:-localhost}
+            MAIL_PORT=${MAIL_PORT:-1025}
+            MAIL_USERNAME=${MAIL_USERNAME}
+            MAIL_PASSWORD=${MAIL_PASSWORD}
+            MAIL_SMTP_AUTH=${MAIL_SMTP_AUTH:-false}
+            MAIL_SMTP_STARTTLS=${MAIL_SMTP_STARTTLS:-false}
+            FRONTEND_PORT=${FRONTEND_PORT:-80}
+            EOF
+              chmod 600 "${ENV_FILE}"
+              echo ".env written to ${ENV_FILE}"
+            else
+              echo "WARNING: POSTGRES_PASSWORD and/or JWT_SECRET secrets are not set – keeping existing .env (if any)."
+            fi
+
       - name: Run deploy script via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
