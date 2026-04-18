@@ -1,0 +1,55 @@
+<div class="page-container" *ngIf="!loading && invoice">
+  <div class="page-header">
+    <h1>Facture {{invoice.invoiceNumber}}</h1>
+    <span class="status-chip" [ngClass]="invoice.status | lowercase">{{invoice.status | status}}</span>
+  </div>
+  <div class="card-grid">
+    <mat-card>
+      <mat-card-header><mat-card-title>Informations</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <p><strong>Client:</strong> {{invoice.clientName}}</p>
+        <p><strong>Consultant:</strong> {{invoice.consultantName}}</p>
+        <p><strong>Date émission:</strong> {{invoice.issueDate | date:'dd/MM/yyyy'}}</p>
+        <p><strong>Échéance:</strong> {{invoice.dueDate | date:'dd/MM/yyyy'}}</p>
+        <p><strong>Montant HT:</strong> {{invoice.totalHT | number:'1.2-2'}} €</p>
+        <p><strong>TVA ({{invoice.vatRate}}%):</strong> {{(invoice.totalTTC - invoice.totalHT) | number:'1.2-2'}} €</p>
+        <p><strong>Total TTC:</strong> {{invoice.totalTTC | number:'1.2-2'}} €</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header><mat-card-title>Enregistrer un paiement</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="paymentForm" (ngSubmit)="recordPayment()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Montant (€)</mat-label>
+            <input matInput type="number" formControlName="amount">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date de paiement</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="paymentDate">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Référence</mat-label>
+            <input matInput formControlName="reference">
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid">Enregistrer</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-card class="mb-24">
+    <mat-card-header><mat-card-title>Historique des paiements</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <table mat-table [dataSource]="payments" class="full-width">
+        <ng-container matColumnDef="date"><th mat-header-cell *matHeaderCellDef>Date</th><td mat-cell *matCellDef="let r">{{r.paymentDate | date:'dd/MM/yyyy'}}</td></ng-container>
+        <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef>Montant</th><td mat-cell *matCellDef="let r">{{r.amount | number:'1.2-2'}} €</td></ng-container>
+        <ng-container matColumnDef="reference"><th mat-header-cell *matHeaderCellDef>Référence</th><td mat-cell *matCellDef="let r">{{r.reference}}</td></ng-container>
+        <tr mat-header-row *matHeaderRowDef="['date','amount','reference']"></tr>
+        <tr mat-row *matRowDef="let r; columns: ['date','amount','reference'];"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div *ngIf="loading" class="loading-center"><mat-spinner></mat-spinner></div>

@@ -1,0 +1,28 @@
+<div class="page-container">
+  <div class="page-header"><h1>Détail consultant</h1></div>
+  <div *ngIf="loading" style="text-align:center;padding:60px"><mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner></div>
+  <mat-card *ngIf="!loading && consultant">
+    <mat-tab-group>
+      <mat-tab label="Informations">
+        <form [formGroup]="form" (ngSubmit)="save()" style="padding:24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <mat-form-field appearance="outline"><mat-label>Prénom</mat-label><input matInput formControlName="firstName"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Nom</mat-label><input matInput formControlName="lastName"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Email</mat-label><input matInput formControlName="email"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Téléphone</mat-label><input matInput formControlName="phone"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Statut</mat-label>
+              <mat-select formControlName="status"><mat-option value="ACTIF">Actif</mat-option><mat-option value="INACTIF">Inactif</mat-option><mat-option value="EN_ATTENTE">En attente</mat-option></mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>TJM (€)</mat-label><input matInput type="number" formControlName="dailyRate"></mat-form-field>
+          </div>
+          <button mat-raised-button color="primary" type="submit" [disabled]="saving" style="margin-top:16px">
+            <span *ngIf="!saving">Enregistrer</span><mat-progress-spinner *ngIf="saving" diameter="20" mode="indeterminate"></mat-progress-spinner>
+          </button>
+        </form>
+      </mat-tab>
+      <mat-tab label="Missions"><p style="padding:24px;color:#757575">Missions du consultant</p></mat-tab>
+      <mat-tab label="Activité"><p style="padding:24px;color:#757575">Comptes rendus d'activité</p></mat-tab>
+      <mat-tab label="Documents"><p style="padding:24px;color:#757575">Documents du consultant</p></mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>
