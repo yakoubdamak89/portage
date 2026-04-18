@@ -136,6 +136,36 @@ docker compose ps
 
 Le build peut prendre **3 à 8 minutes** selon la connexion et les ressources du VPS (téléchargement des dépendances Maven et npm).
 
+### 5.1 Redémarrage automatique avec systemd (recommandé)
+
+Pour que les conteneurs (postgres, backend, frontend) **démarrent automatiquement au boot** du VPS et soient gérés de manière centralisée, installez le service systemd inclus dans le projet :
+
+```bash
+sudo bash scripts/setup-systemd.sh /chemin/vers/portage
+# Exemple : sudo bash scripts/setup-systemd.sh /home/deploy/portage
+```
+
+Après l'installation, vous n'avez **plus jamais besoin de lancer `docker compose` manuellement**. Le service gère tout :
+
+```bash
+# Vérifier l'état
+systemctl status portage
+
+# Redémarrer tous les conteneurs
+systemctl restart portage
+
+# Arrêter tous les conteneurs
+systemctl stop portage
+
+# Démarrer tous les conteneurs
+systemctl start portage
+
+# Voir les logs du service
+journalctl -u portage -f
+```
+
+> **Note** : Quand le service systemd est installé, le script `deploy.sh` (utilisé par la CI/CD) l'utilise automatiquement pour relancer les conteneurs après chaque déploiement. Plus besoin d'intervention manuelle.
+
 ### Vérifier les logs en temps réel
 
 ```bash

@@ -231,5 +231,10 @@ Avant le premier déploiement automatique, s'assurer que le VPS est correctement
 3. **Secrets GitHub configurés** (voir [§ 2](#2-secrets-à-configurer)) : le pipeline
    crée/met à jour automatiquement `~/portage/.env` à chaque déploiement.
 4. **Clé publique SSH** de déploiement ajoutée à `~/.ssh/authorized_keys` (voir [§ 2](#2-secrets-à-configurer)).
+5. **Service systemd installé** (recommandé) : pour que les conteneurs redémarrent automatiquement après un déploiement ou un reboot du VPS, sans aucune intervention manuelle :
+   ```bash
+   sudo bash ~/portage/scripts/setup-systemd.sh ~/portage
+   ```
+   Voir [`DEPLOY.md § 5.1`](DEPLOY.md#51-redémarrage-automatique-avec-systemd-recommandé) pour plus de détails.
 
 Après ces étapes, chaque merge sur `main` déclenche automatiquement le redéploiement.
