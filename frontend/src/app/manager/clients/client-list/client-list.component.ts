@@ -8,7 +8,7 @@ import { ClientService, Client } from '../../../core/services/client.service';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
-@Component({ selector: 'app-client-list', templateUrl: './client-list.component.html' })
+@Component({ standalone: false, selector: 'app-client-list', templateUrl: './client-list.component.html' })
 export class ClientListComponent implements OnInit, OnDestroy {
   displayedColumns = ['name', 'siret', 'contactName', 'status', 'actions'];
   dataSource = new MatTableDataSource<Client>();

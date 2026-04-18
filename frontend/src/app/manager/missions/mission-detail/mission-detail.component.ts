@@ -6,6 +6,7 @@ import { ConsultantService, Consultant } from '../../../core/services/consultant
 import { ClientService, Client } from '../../../core/services/client.service';
 
 @Component({
+  standalone: false,
   selector: 'app-mission-detail',
   templateUrl: './mission-detail.component.html',
   styleUrls: ['./mission-detail.component.scss']

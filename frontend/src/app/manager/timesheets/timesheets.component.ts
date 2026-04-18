@@ -3,6 +3,7 @@ import { TimesheetService, Timesheet } from '../../core/services/timesheet.servi
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
+  standalone: false,
   selector: 'app-timesheets',
   templateUrl: './timesheets.component.html',
   styleUrls: ['./timesheets.component.scss']

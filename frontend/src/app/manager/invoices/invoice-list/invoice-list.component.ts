@@ -8,7 +8,7 @@ import { InvoiceService, Invoice } from '../../../core/services/invoice.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
-@Component({ selector: 'app-invoice-list', templateUrl: './invoice-list.component.html' })
+@Component({ standalone: false, selector: 'app-invoice-list', templateUrl: './invoice-list.component.html' })
 export class InvoiceListComponent implements OnInit, OnDestroy {
   displayedColumns = ['invoiceNumber', 'consultant', 'client', 'amountHT', 'amountTTC', 'status', 'dueDate', 'actions'];
   dataSource = new MatTableDataSource<Invoice>();

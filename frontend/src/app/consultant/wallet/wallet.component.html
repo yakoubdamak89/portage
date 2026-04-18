@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header"><h1>Mon compte épargne</h1></div>
+  <div *ngIf="loading" class="loading-wrapper"><mat-spinner diameter="40"></mat-spinner></div>
+  <ng-container *ngIf="!loading">
+    <div class="card-grid" *ngIf="wallet">
+      <app-kpi-card label="Solde actuel" [value]="formatCurrency(wallet.balance)" icon="account_balance_wallet" color="#6A1B9A"></app-kpi-card>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+      <mat-card>
+        <mat-card-header><mat-card-title>Historique des mouvements</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="movements" class="full-width">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let m">{{m.date | date:'dd/MM/yyyy'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let m">{{m.description}}</td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let m">
+                <mat-icon [style.color]="m.type === 'CREDIT' ? '#2E7D32' : '#C62828'">
+                  {{m.type === 'CREDIT' ? 'arrow_upward' : 'arrow_downward'}}
+                </mat-icon>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Montant</th>
+              <td mat-cell *matCellDef="let m" [style.color]="m.type === 'CREDIT' ? '#2E7D32' : '#C62828'">
+                {{m.type === 'CREDIT' ? '+' : '-'}}{{formatCurrency(m.amount)}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="balance">
+              <th mat-header-cell *matHeaderCellDef>Solde</th>
+              <td mat-cell *matCellDef="let m">{{formatCurrency(m.balance)}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="movementColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: movementColumns;"></tr>
+          </table>
+          <p *ngIf="!movements.length" class="no-data">Aucun mouvement</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header><mat-card-title>Simulation de revenu</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="simulationForm" (ngSubmit)="simulate()" class="sim-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Taux journalier (€)</mat-label>
+              <input matInput type="number" formControlName="dailyRate" min="1">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Jours travaillés</mat-label>
+              <input matInput type="number" formControlName="daysWorked" min="1" max="31">
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" [disabled]="simulationForm.invalid || simulating">
+              Simuler
+            </button>
+          </form>
+          <div *ngIf="simulation" class="sim-result">
+            <p><strong>Revenu projeté :</strong> {{formatCurrency(simulation.projectedRevenue)}}</p>
+            <p><strong>Charges estimées :</strong> {{formatCurrency(simulation.estimatedCharges)}}</p>
+            <p><strong>Salaire estimé :</strong> {{formatCurrency(simulation.estimatedSalary)}}</p>
+            <p><strong>Solde estimé :</strong> {{formatCurrency(simulation.estimatedBalance)}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</div>

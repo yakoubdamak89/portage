@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { PayslipService, Payslip } from '../../core/services/payslip.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-@Component({ selector: 'app-payroll', templateUrl: './payroll.component.html' })
+@Component({ standalone: false, selector: 'app-payroll', templateUrl: './payroll.component.html' })
 export class PayrollComponent implements OnInit, OnDestroy {
   displayedColumns = ['consultant', 'period', 'grossSalary', 'netSalary', 'status', 'actions'];
   dataSource = new MatTableDataSource<Payslip>();

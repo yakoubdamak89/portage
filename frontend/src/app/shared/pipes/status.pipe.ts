@@ -19,7 +19,7 @@ const STATUS_LABELS: Record<string, string> = {
   REMBOURSE: 'Remboursé'
 };
 
-@Pipe({ name: 'status' })
+@Pipe({ standalone: false, name: 'status' })
 export class StatusPipe implements PipeTransform {
   transform(value: string): string {
     return STATUS_LABELS[value] || value;

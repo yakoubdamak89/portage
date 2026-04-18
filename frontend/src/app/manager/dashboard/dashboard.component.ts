@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService, ManagerDashboardStats } from '../../core/services/dashboard.service';
 
-@Component({ selector: 'app-manager-dashboard', templateUrl: './dashboard.component.html' })
+@Component({ standalone: false, selector: 'app-manager-dashboard', templateUrl: './dashboard.component.html' })
 export class ManagerDashboardComponent implements OnInit, OnDestroy {
   stats: ManagerDashboardStats = { activeConsultants: 0, activeMissions: 0, monthlyRevenue: 0, pendingInvoices: 0, recentInvoices: [], endingSoonMissions: [] };
   loading = true;

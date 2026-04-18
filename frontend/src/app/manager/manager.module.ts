@@ -30,7 +30,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     InvoiceListComponent,
     InvoiceDetailComponent,
     PaymentsComponent,
-    PayrollComponent,
+    PayrollComponent
   ],
   imports: [SharedModule, ManagerRoutingModule, MatSlideToggleModule]
 })

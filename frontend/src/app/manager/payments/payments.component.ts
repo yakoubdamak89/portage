@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PaymentService, Payment } from '../../core/services/payment.service';
 
-@Component({ selector: 'app-payments', templateUrl: './payments.component.html' })
+@Component({ standalone: false, selector: 'app-payments', templateUrl: './payments.component.html' })
 export class PaymentsComponent implements OnInit, OnDestroy {
   displayedColumns = ['invoiceNumber', 'client', 'amount', 'paymentDate', 'reference'];
   dataSource = new MatTableDataSource<Payment>();

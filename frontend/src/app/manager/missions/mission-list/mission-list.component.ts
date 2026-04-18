@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MissionService, Mission } from '../../../core/services/mission.service';
 
 @Component({
+  standalone: false,
   selector: 'app-mission-list',
   templateUrl: './mission-list.component.html',
   styleUrls: ['./mission-list.component.scss']

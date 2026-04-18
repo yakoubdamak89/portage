@@ -7,7 +7,7 @@ import { PaymentService } from '../../../core/services/payment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-@Component({ selector: 'app-invoice-detail', templateUrl: './invoice-detail.component.html' })
+@Component({ standalone: false, selector: 'app-invoice-detail', templateUrl: './invoice-detail.component.html' })
 export class InvoiceDetailComponent implements OnInit, OnDestroy {
   invoice: Invoice | null = null;
   payments: any[] = [];

@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../core/auth/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 
-@Component({ selector: 'app-manager-layout', templateUrl: './manager-layout.component.html', styleUrls: ['./manager-layout.component.scss'] })
+@Component({ standalone: false, selector: 'app-manager-layout', templateUrl: './manager-layout.component.html', styleUrls: ['./manager-layout.component.scss'] })
 export class ManagerLayoutComponent implements OnInit, OnDestroy {
   sidenavOpen = true;
   isGlassMode = false;
