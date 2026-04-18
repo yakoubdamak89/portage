@@ -141,6 +141,7 @@ Les erreurs les plus courantes :
 | Job **ci** échoue à `mvn package` | Erreur de compilation Java | Corriger le code et pousser un nouveau commit |
 | Job **ci** échoue à `npm run build` | Erreur TypeScript / Angular | Corriger le code et pousser un nouveau commit |
 | Job **deploy** échoue à la connexion SSH | Secret incorrect ou VPS inaccessible | Vérifier `VPS_HOST`, `VPS_PORT`, `VPS_USER`, `VPS_SSH_KEY` |
+| `deploy.sh` échoue avec `POSTGRES_PASSWORD is missing a value` | Le fichier `.env` est absent ou contient encore les valeurs d'exemple | Sur le VPS : `cp ~/portage/.env.example ~/portage/.env` puis renseigner `POSTGRES_PASSWORD` et `JWT_SECRET` |
 | `deploy.sh` échoue sur `docker compose up` | Erreur de build Docker sur le VPS | Voir les logs Docker ci-dessous |
 | Healthcheck backend timeout | Application ne démarre pas | Voir les logs backend ci-dessous |
 
