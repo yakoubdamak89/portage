@@ -10,7 +10,8 @@
 # =============================================================================
 set -euo pipefail
 
-REPO_DIR="${HOME}/portage"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 COMPOSE_FILE="${REPO_DIR}/docker-compose.yml"
 
 echo "──────────────────────────────────────────────────────────────"
