@@ -1,0 +1,25 @@
+<div class="page-container">
+  <div class="page-header"><h1>Détail client</h1></div>
+  <div *ngIf="loading" style="text-align:center;padding:60px"><mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner></div>
+  <mat-card *ngIf="!loading && client">
+    <mat-tab-group>
+      <mat-tab label="Informations">
+        <form [formGroup]="form" (ngSubmit)="save()" style="padding:24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <mat-form-field appearance="outline" style="grid-column:1/-1"><mat-label>Nom</mat-label><input matInput formControlName="name"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>SIRET</mat-label><input matInput formControlName="siret"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Statut</mat-label><mat-select formControlName="status"><mat-option value="ACTIF">Actif</mat-option><mat-option value="INACTIF">Inactif</mat-option></mat-select></mat-form-field>
+            <mat-form-field appearance="outline" style="grid-column:1/-1"><mat-label>Adresse</mat-label><input matInput formControlName="address"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Ville</mat-label><input matInput formControlName="city"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Code postal</mat-label><input matInput formControlName="postalCode"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Contact</mat-label><input matInput formControlName="contactName"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Email contact</mat-label><input matInput formControlName="contactEmail"></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>Tél. contact</mat-label><input matInput formControlName="contactPhone"></mat-form-field>
+          </div>
+          <button mat-raised-button color="primary" type="submit" [disabled]="saving" style="margin-top:16px">Enregistrer</button>
+        </form>
+      </mat-tab>
+      <mat-tab label="Missions"><p style="padding:24px;color:#757575">Missions associées</p></mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

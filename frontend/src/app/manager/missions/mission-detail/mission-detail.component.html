@@ -1,0 +1,19 @@
+<div class="page-container">
+  <h1>{{id ? 'Modifier la mission' : 'Nouvelle mission'}}</h1>
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <mat-form-field appearance="outline" class="full-width"><mat-label>Titre</mat-label><input matInput formControlName="title"></mat-form-field>
+        <mat-form-field appearance="outline" class="full-width"><mat-label>Description</mat-label><textarea matInput formControlName="description" rows="3"></textarea></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>Consultant</mat-label><mat-select formControlName="consultantId"><mat-option *ngFor="let c of consultants" [value]="c.id">{{c.firstName}} {{c.lastName}}</mat-option></mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>Client</mat-label><mat-select formControlName="clientId"><mat-option *ngFor="let c of clients" [value]="c.id">{{c.name}}</mat-option></mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>Début</mat-label><input matInput [matDatepicker]="startPicker" formControlName="startDate"><mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle><mat-datepicker #startPicker></mat-datepicker></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>Fin</mat-label><input matInput [matDatepicker]="endPicker" formControlName="endDate"><mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle><mat-datepicker #endPicker></mat-datepicker></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>TJM (€)</mat-label><input matInput type="number" formControlName="dailyRate"></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>Jours estimés</mat-label><input matInput type="number" formControlName="estimatedDays"></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>Statut</mat-label><mat-select formControlName="status"><mat-option value="ACTIVE">Active</mat-option><mat-option value="TERMINEE">Terminée</mat-option><mat-option value="SUSPENDUE">Suspendue</mat-option></mat-select></mat-form-field>
+        <div class="actions"><button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Enregistrer</button></div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
