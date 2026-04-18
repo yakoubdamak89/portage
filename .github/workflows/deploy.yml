@@ -64,22 +64,32 @@ jobs:
     runs-on: ubuntu-latest
     needs: ci
     environment: production   # Optional: add a GitHub Environment for extra protection rules.
-    permissions: {}
+    permissions:
+      contents: read
 
     steps:
-      - name: Deploy via SSH
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy source files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:     ${{ secrets.VPS_HOST }}
+          port:     ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USER }}
+          key:      ${{ secrets.VPS_SSH_KEY }}
+          # Copy only the files needed for deployment; excludes .git, .github, etc.
+          source:   "backend,frontend,scripts,docker-compose.yml,.env.example"
+          target:   "${{ secrets.VPS_DEPLOY_PATH }}"   # e.g. /home/user/portage
+          rm:       false   # preserve server-side files not tracked in git (e.g. .env, uploads)
+
+      - name: Run deploy script via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:        ${{ secrets.VPS_HOST }}
           port:        ${{ secrets.VPS_PORT }}
           username:    ${{ secrets.VPS_USER }}
           key:         ${{ secrets.VPS_SSH_KEY }}
-          # Pass the deploy script inline so no extra file needs to be present on the runner.
           script_stop: true   # Abort the SSH session on the first failing command.
           script: |
-            set -euo pipefail
-            # Bootstrap: clone the repository on first deploy if it doesn't exist yet.
-            if [ ! -d "${HOME}/portage/.git" ]; then
-              GIT_TERMINAL_PROMPT=0 git clone https://github.com/IngeniousDevelopersINDEV/portage.git "${HOME}/portage"
-            fi
-            bash ~/portage/scripts/deploy.sh
+            bash "${{ secrets.VPS_DEPLOY_PATH }}/scripts/deploy.sh"
