@@ -5,7 +5,7 @@
 # Usage (called automatically by the GitHub Actions workflow):
 #   bash ~/portage/scripts/deploy.sh
 #
-# Can also be run manually on the VPS:
+# Can also be run manually on the VPS (after pulling the latest code yourself):
 #   cd ~/portage && bash scripts/deploy.sh
 # =============================================================================
 set -euo pipefail
@@ -17,20 +17,14 @@ echo "────────────────────────�
 echo "  Portage – Deployment started at $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 echo "──────────────────────────────────────────────────────────────"
 
-# ── 1. Pull the latest code ───────────────────────────────────────────────────
-echo "[1/4] Pulling latest code from origin/main …"
-cd "${REPO_DIR}"
-GIT_TERMINAL_PROMPT=0 git fetch origin main
-git reset --hard origin/main
-
-# ── 2. Rebuild and restart containers ────────────────────────────────────────
-echo "[2/4] Rebuilding Docker images and restarting containers …"
+# ── 1. Rebuild and restart containers ────────────────────────────────────────
+echo "[1/3] Rebuilding Docker images and restarting containers …"
 docker compose -f "${COMPOSE_FILE}" pull --ignore-pull-failures 2>&1 || \
   echo "WARNING: 'docker compose pull' encountered errors (continuing with local images)."
 docker compose -f "${COMPOSE_FILE}" up -d --build --remove-orphans
 
-# ── 3. Wait for the backend health check to pass ─────────────────────────────
-echo "[3/4] Waiting for backend to become healthy …"
+# ── 2. Wait for the backend health check to pass ─────────────────────────────
+echo "[2/3] Waiting for backend to become healthy …"
 MAX_WAIT=120   # seconds
 ELAPSED=0
 INTERVAL=5
@@ -53,8 +47,8 @@ until docker inspect --format='{{.State.Health.Status}}' "${BACKEND_ID}" 2>/dev/
 done
 echo "  Backend is healthy."
 
-# ── 4. Clean up unused Docker resources ──────────────────────────────────────
-echo "[4/4] Removing dangling images to free disk space …"
+# ── 3. Clean up unused Docker resources ──────────────────────────────────────
+echo "[3/3] Removing dangling images to free disk space …"
 docker image prune -f
 
 echo ""
