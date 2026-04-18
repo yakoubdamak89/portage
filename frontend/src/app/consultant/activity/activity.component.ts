@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TimesheetService, Timesheet } from '../../core/services/timesheet.service';
 
-@Component({ selector: 'app-activity', templateUrl: './activity.component.html' })
+@Component({ standalone: false, selector: 'app-activity', templateUrl: './activity.component.html' })
 export class ActivityComponent implements OnInit, OnDestroy {
   timesheets: Timesheet[] = [];
   displayedColumns = ['period', 'mission', 'days', 'status', 'actions'];

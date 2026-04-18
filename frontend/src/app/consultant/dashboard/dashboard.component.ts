@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService, ConsultantDashboardStats } from '../../core/services/dashboard.service';
 
-@Component({ selector: 'app-consultant-dashboard', templateUrl: './dashboard.component.html' })
+@Component({ standalone: false, selector: 'app-consultant-dashboard', templateUrl: './dashboard.component.html' })
 export class ConsultantDashboardComponent implements OnInit, OnDestroy {
   stats: ConsultantDashboardStats = {
     currentMission: null,

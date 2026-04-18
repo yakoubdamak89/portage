@@ -11,9 +11,9 @@
         <p><strong>Consultant:</strong> {{invoice.consultantName}}</p>
         <p><strong>Date émission:</strong> {{invoice.issueDate | date:'dd/MM/yyyy'}}</p>
         <p><strong>Échéance:</strong> {{invoice.dueDate | date:'dd/MM/yyyy'}}</p>
-        <p><strong>Montant HT:</strong> {{invoice.totalHT | number:'1.2-2'}} €</p>
-        <p><strong>TVA ({{invoice.vatRate}}%):</strong> {{(invoice.totalTTC - invoice.totalHT) | number:'1.2-2'}} €</p>
-        <p><strong>Total TTC:</strong> {{invoice.totalTTC | number:'1.2-2'}} €</p>
+        <p><strong>Montant HT:</strong> {{invoice.amountHT | number:'1.2-2'}} €</p>
+        <p><strong>TVA ({{invoice.tva}}%):</strong> {{(invoice.amountTTC - invoice.amountHT) | number:'1.2-2'}} €</p>
+        <p><strong>Total TTC:</strong> {{invoice.amountTTC | number:'1.2-2'}} €</p>
       </mat-card-content>
     </mat-card>
     <mat-card>

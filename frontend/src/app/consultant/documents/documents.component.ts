@@ -11,7 +11,7 @@ export interface ConsultantDocument {
   url?: string;
 }
 
-@Component({ selector: 'app-documents', templateUrl: './documents.component.html' })
+@Component({ standalone: false, selector: 'app-documents', templateUrl: './documents.component.html' })
 export class DocumentsComponent implements OnInit, OnDestroy {
   documents: ConsultantDocument[] = [];
   displayedColumns = ['name', 'type', 'uploadedAt', 'actions'];

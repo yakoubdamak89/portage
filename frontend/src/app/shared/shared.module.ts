@@ -22,6 +22,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
 import { KpiCardComponent } from './components/kpi-card/kpi-card.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { StatusPipe } from './pipes/status.pipe';
@@ -30,7 +33,8 @@ const MATERIAL_MODULES = [
   MatCardModule, MatButtonModule, MatIconModule, MatTableModule, MatPaginatorModule,
   MatSortModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatDialogModule,
   MatSnackBarModule, MatChipsModule, MatProgressSpinnerModule, MatTooltipModule,
-  MatMenuModule, MatTabsModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatBadgeModule
+  MatMenuModule, MatTabsModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatBadgeModule,
+  MatSidenavModule, MatToolbarModule, MatListModule
 ];
 
 @NgModule({

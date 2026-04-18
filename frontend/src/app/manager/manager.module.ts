@@ -14,6 +14,7 @@ import { InvoiceListComponent } from './invoices/invoice-list/invoice-list.compo
 import { InvoiceDetailComponent } from './invoices/invoice-detail/invoice-detail.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { PayrollComponent } from './payroll/payroll.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,6 @@ import { PayrollComponent } from './payroll/payroll.component';
     PaymentsComponent,
     PayrollComponent
   ],
-  imports: [SharedModule, ManagerRoutingModule]
+  imports: [SharedModule, ManagerRoutingModule, MatSlideToggleModule]
 })
 export class ManagerModule {}

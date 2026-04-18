@@ -8,7 +8,7 @@ import { ConsultantService, Consultant } from '../../../core/services/consultant
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
-@Component({ selector: 'app-consultant-list', templateUrl: './consultant-list.component.html' })
+@Component({ standalone: false, selector: 'app-consultant-list', templateUrl: './consultant-list.component.html' })
 export class ConsultantListComponent implements OnInit, OnDestroy {
   displayedColumns = ['firstName', 'email', 'status', 'dailyRate', 'managerName', 'actions'];
   dataSource = new MatTableDataSource<Consultant>();

@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ClientService, Client } from '../../../core/services/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-@Component({ selector: 'app-client-detail', templateUrl: './client-detail.component.html' })
+@Component({ standalone: false, selector: 'app-client-detail', templateUrl: './client-detail.component.html' })
 export class ClientDetailComponent implements OnInit, OnDestroy {
   client: Client | null = null;
   form!: FormGroup;

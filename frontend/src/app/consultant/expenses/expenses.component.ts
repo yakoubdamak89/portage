@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ExpenseService, ExpenseReport } from '../../core/services/expense.service';
 
-@Component({ selector: 'app-expenses', templateUrl: './expenses.component.html' })
+@Component({ standalone: false, selector: 'app-expenses', templateUrl: './expenses.component.html' })
 export class ExpensesComponent implements OnInit, OnDestroy {
   expenses: ExpenseReport[] = [];
   displayedColumns = ['title', 'totalAmount', 'status', 'submittedAt', 'actions'];

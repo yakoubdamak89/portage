@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" [class.glass-mode]="isGlassMode">
   <mat-sidenav #sidenav mode="side" [opened]="sidenavOpen" class="sidenav">
     <div class="sidenav-header">
       <mat-icon class="brand-icon">business_center</mat-icon>
@@ -15,6 +15,12 @@
     <mat-toolbar class="app-toolbar">
       <button mat-icon-button (click)="sidenavOpen = !sidenavOpen"><mat-icon>menu</mat-icon></button>
       <span class="toolbar-spacer"></span>
+      <div class="glass-toggle-wrap" [class.active]="isGlassMode">
+        <mat-icon class="toggle-icon">auto_awesome</mat-icon>
+        <mat-slide-toggle [checked]="isGlassMode" (change)="themeService.toggleGlassMode()" color="primary" class="glass-toggle">
+          <span class="toggle-label">Mode Glass</span>
+        </mat-slide-toggle>
+      </div>
       <button mat-icon-button><mat-icon>notifications</mat-icon></button>
       <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn">
         <mat-icon>account_circle</mat-icon>

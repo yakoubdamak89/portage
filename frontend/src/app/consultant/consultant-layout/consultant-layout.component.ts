@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-consultant-layout',
   templateUrl: './consultant-layout.component.html',
   styleUrls: ['./consultant-layout.component.scss']

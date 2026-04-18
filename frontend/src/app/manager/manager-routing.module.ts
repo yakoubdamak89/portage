@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ManagerLayoutComponent } from './manager-layout/manager-layout.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { ManagerDashboardComponent as DashboardComponent } from './dashboard/dashboard.component';
 import { ConsultantListComponent } from './consultants/consultant-list/consultant-list.component';
 import { ConsultantDetailComponent } from './consultants/consultant-detail/consultant-detail.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';

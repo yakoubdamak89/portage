@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WalletService, Wallet, WalletMovement, WalletSimulation } from '../../core/services/wallet.service';
 
-@Component({ selector: 'app-wallet', templateUrl: './wallet.component.html' })
+@Component({ standalone: false, selector: 'app-wallet', templateUrl: './wallet.component.html' })
 export class WalletComponent implements OnInit, OnDestroy {
   wallet: Wallet | null = null;
   movements: WalletMovement[] = [];

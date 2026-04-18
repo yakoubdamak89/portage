@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PayslipService, Payslip } from '../../core/services/payslip.service';
 
-@Component({ selector: 'app-payslips', templateUrl: './payslips.component.html' })
+@Component({ standalone: false, selector: 'app-payslips', templateUrl: './payslips.component.html' })
 export class PayslipsComponent implements OnInit, OnDestroy {
   payslips: Payslip[] = [];
   displayedColumns = ['period', 'grossSalary', 'netSalary', 'generatedAt', 'actions'];
