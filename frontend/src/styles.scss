@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Roboto, sans-serif; }
+
+.page-container { padding: 24px; }
+.page-header { margin-bottom: 24px; }
+.page-header h1 { margin: 0; font-size: 24px; font-weight: 600; color: #212121; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.full-width { width: 100%; }
+.loading-wrapper { display: flex; justify-content: center; align-items: center; padding: 48px; }
+.no-data { color: #9E9E9E; text-align: center; padding: 24px; margin: 0; }
+.empty-card { margin-bottom: 16px; }
+.sim-form { display: flex; flex-direction: column; gap: 12px; }
+.sim-result { margin-top: 16px; padding: 16px; background: #F5F5F5; border-radius: 8px; }
+.sim-result p { margin: 4px 0; }
+
+.status-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.status-chip.brouillon { background: #E3F2FD; color: #1565C0; }
+.status-chip.soumis { background: #FFF8E1; color: #F57F17; }
+.status-chip.valide { background: #E8F5E9; color: #2E7D32; }
+.status-chip.rejete { background: #FFEBEE; color: #C62828; }
+.status-chip.en_cours { background: #E8F5E9; color: #2E7D32; }
+.status-chip.terminee { background: #ECEFF1; color: #546E7A; }
+.status-chip.actif { background: #E8F5E9; color: #2E7D32; }
+.status-chip.inactif { background: #ECEFF1; color: #546E7A; }
+.status-chip.envoyee { background: #E3F2FD; color: #1565C0; }
+.status-chip.payee { background: #E8F5E9; color: #2E7D32; }
+.status-chip.en_retard { background: #FFEBEE; color: #C62828; }
+.status-chip.rembourse { background: #F3E5F5; color: #6A1B9A; }
+

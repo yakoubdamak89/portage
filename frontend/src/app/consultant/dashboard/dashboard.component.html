@@ -1,0 +1,29 @@
+<div class="page-container">
+  <div class="page-header"><h1>Tableau de bord</h1></div>
+  <div *ngIf="loading" class="loading-wrapper"><mat-spinner diameter="40"></mat-spinner></div>
+  <ng-container *ngIf="!loading">
+    <div class="card-grid">
+      <app-kpi-card label="Mission en cours" [value]="stats.currentMission || 'Aucune'" icon="work" color="#2E7D32"></app-kpi-card>
+      <app-kpi-card label="Jours déclarés ce mois" [value]="stats.declaredDaysThisMonth" icon="event_note" color="#1565C0"></app-kpi-card>
+      <app-kpi-card label="Revenu mensuel" [value]="formatCurrency(stats.monthlyRevenue)" icon="euro" color="#FF6F00"></app-kpi-card>
+      <app-kpi-card label="Solde compte épargne" [value]="formatCurrency(stats.walletBalance)" icon="account_balance_wallet" color="#6A1B9A"></app-kpi-card>
+    </div>
+    <div class="bottom-grid">
+      <mat-card *ngIf="stats.pendingTasks?.length">
+        <mat-card-header><mat-card-title>Tâches en attente</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item *ngFor="let task of stats.pendingTasks">
+              <mat-icon matListItemIcon color="warn">warning</mat-icon>
+              <span matListItemTitle>{{task}}</span>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="!stats.pendingTasks?.length">
+        <mat-card-header><mat-card-title>Tâches en attente</mat-card-title></mat-card-header>
+        <mat-card-content><p class="no-data">Aucune tâche en attente</p></mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</div>
