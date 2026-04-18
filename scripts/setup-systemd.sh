@@ -41,12 +41,23 @@ if [ ! -f "${DEPLOY_PATH}/docker-compose.yml" ]; then
   exit 1
 fi
 
+# ── Detect docker binary path ────────────────────────────────────────────────
+DOCKER_BIN="$(command -v docker 2>/dev/null || true)"
+if [ -z "${DOCKER_BIN}" ]; then
+  echo "ERROR: docker binary not found in PATH."
+  echo "       Install Docker first (see DEPLOY.md § 2)."
+  exit 1
+fi
+
 # ── Install the service ──────────────────────────────────────────────────────
 echo "Installing Portage systemd service …"
 echo "  Deploy path: ${DEPLOY_PATH}"
+echo "  Docker binary: ${DOCKER_BIN}"
 
-# Replace placeholder with actual deploy path
-sed "s|__DEPLOY_PATH__|${DEPLOY_PATH}|g" "${SERVICE_TEMPLATE}" > "${SERVICE_FILE}"
+# Replace placeholders with actual paths
+sed -e "s|__DEPLOY_PATH__|${DEPLOY_PATH}|g" \
+    -e "s|__DOCKER_BIN__|${DOCKER_BIN}|g" \
+    "${SERVICE_TEMPLATE}" > "${SERVICE_FILE}"
 chmod 644 "${SERVICE_FILE}"
 
 # Reload systemd, enable and start the service
