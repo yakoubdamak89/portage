@@ -1,41 +1,100 @@
 <div class="page-container">
-  <div class="page-header"><h1>Tableau de bord</h1></div>
-  <div class="card-grid">
-    <app-kpi-card label="Consultants actifs" [value]="stats.activeConsultants" icon="people" color="#1565C0"></app-kpi-card>
-    <app-kpi-card label="Missions en cours" [value]="stats.activeMissions" icon="work" color="#2E7D32"></app-kpi-card>
-    <app-kpi-card label="CA mensuel" [value]="formatCurrency(stats.monthlyRevenue)" icon="euro" color="#FF6F00"></app-kpi-card>
-    <app-kpi-card label="Factures en attente" [value]="stats.pendingInvoices" icon="receipt" color="#C62828"></app-kpi-card>
+  <div class="page-header">
+    <h1>Tableau de bord</h1>
+    <p class="page-subtitle">Bienvenue sur votre espace de gestion portage salarial</p>
   </div>
+
+  <!-- KPI Cards -->
+  <div class="card-grid">
+    <app-kpi-card label="Consultants actifs"  [value]="stats.activeConsultants" icon="people"   color="#1d4ed8"></app-kpi-card>
+    <app-kpi-card label="Missions en cours"   [value]="stats.activeMissions"    icon="work"     color="#065f46"></app-kpi-card>
+    <app-kpi-card label="CA mensuel"          [value]="formatCurrency(stats.monthlyRevenue)" icon="euro" color="#b45309"></app-kpi-card>
+    <app-kpi-card label="Factures en attente" [value]="stats.pendingInvoices"   icon="receipt_long" color="#991b1b"></app-kpi-card>
+  </div>
+
+  <!-- Dashboard sections -->
   <div class="dashboard-grid">
+    <!-- Recent invoices -->
     <mat-card class="dashboard-card">
-      <mat-card-header><mat-card-title>Factures récentes</mat-card-title></mat-card-header>
+      <mat-card-header>
+        <div class="section-header-icon invoices-icon"><mat-icon>receipt_long</mat-icon></div>
+        <mat-card-title>Factures récentes</mat-card-title>
+      </mat-card-header>
       <mat-card-content>
-        <table mat-table [dataSource]="stats.recentInvoices" class="full-width">
-          <ng-container matColumnDef="invoiceNumber"><th mat-header-cell *matHeaderCellDef>N°</th><td mat-cell *matCellDef="let r">{{r.invoiceNumber}}</td></ng-container>
-          <ng-container matColumnDef="consultantName"><th mat-header-cell *matHeaderCellDef>Consultant</th><td mat-cell *matCellDef="let r">{{r.consultantName}}</td></ng-container>
-          <ng-container matColumnDef="clientName"><th mat-header-cell *matHeaderCellDef>Client</th><td mat-cell *matCellDef="let r">{{r.clientName}}</td></ng-container>
-          <ng-container matColumnDef="amountTTC"><th mat-header-cell *matHeaderCellDef>TTC</th><td mat-cell *matCellDef="let r">{{formatCurrency(r.amountTTC)}}</td></ng-container>
-          <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Statut</th><td mat-cell *matCellDef="let r"><span class="status-chip" [class]="r.status?.toLowerCase()">{{r.status | status}}</span></td></ng-container>
-          <ng-container matColumnDef="dueDate"><th mat-header-cell *matHeaderCellDef>Échéance</th><td mat-cell *matCellDef="let r">{{r.dueDate | date:'dd/MM/yyyy'}}</td></ng-container>
+        <table mat-table [dataSource]="stats.recentInvoices" class="full-width" *ngIf="stats.recentInvoices?.length; else noInvoices">
+          <ng-container matColumnDef="invoiceNumber">
+            <th mat-header-cell *matHeaderCellDef>N°</th>
+            <td mat-cell *matCellDef="let r">{{r.invoiceNumber}}</td>
+          </ng-container>
+          <ng-container matColumnDef="consultantName">
+            <th mat-header-cell *matHeaderCellDef>Consultant</th>
+            <td mat-cell *matCellDef="let r">{{r.consultantName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="clientName">
+            <th mat-header-cell *matHeaderCellDef>Client</th>
+            <td mat-cell *matCellDef="let r">{{r.clientName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="amountTTC">
+            <th mat-header-cell *matHeaderCellDef>TTC</th>
+            <td mat-cell *matCellDef="let r" class="amount-cell">{{formatCurrency(r.amountTTC)}}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let r"><span class="status-chip" [class]="r.status?.toLowerCase()">{{r.status | status}}</span></td>
+          </ng-container>
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef>Échéance</th>
+            <td mat-cell *matCellDef="let r">{{r.dueDate | date:'dd/MM/yyyy'}}</td>
+          </ng-container>
           <tr mat-header-row *matHeaderRowDef="invoiceColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: invoiceColumns;"></tr>
         </table>
-        <p *ngIf="!stats.recentInvoices?.length" class="no-data">Aucune facture récente</p>
+        <ng-template #noInvoices>
+          <div class="empty-state">
+            <mat-icon class="empty-icon">receipt_long</mat-icon>
+            <p>Aucune facture récente</p>
+          </div>
+        </ng-template>
       </mat-card-content>
     </mat-card>
+
+    <!-- Ending soon missions -->
     <mat-card class="dashboard-card">
-      <mat-card-header><mat-card-title>Missions se terminant bientôt</mat-card-title></mat-card-header>
+      <mat-card-header>
+        <div class="section-header-icon missions-icon"><mat-icon>timer</mat-icon></div>
+        <mat-card-title>Missions se terminant bientôt</mat-card-title>
+      </mat-card-header>
       <mat-card-content>
-        <table mat-table [dataSource]="stats.endingSoonMissions" class="full-width">
-          <ng-container matColumnDef="title"><th mat-header-cell *matHeaderCellDef>Mission</th><td mat-cell *matCellDef="let r">{{r.title}}</td></ng-container>
-          <ng-container matColumnDef="consultantName"><th mat-header-cell *matHeaderCellDef>Consultant</th><td mat-cell *matCellDef="let r">{{r.consultantName}}</td></ng-container>
-          <ng-container matColumnDef="clientName"><th mat-header-cell *matHeaderCellDef>Client</th><td mat-cell *matCellDef="let r">{{r.clientName}}</td></ng-container>
-          <ng-container matColumnDef="endDate"><th mat-header-cell *matHeaderCellDef>Fin</th><td mat-cell *matCellDef="let r">{{r.endDate | date:'dd/MM/yyyy'}}</td></ng-container>
-          <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Statut</th><td mat-cell *matCellDef="let r"><span class="status-chip" [class]="r.status?.toLowerCase()">{{r.status | status}}</span></td></ng-container>
+        <table mat-table [dataSource]="stats.endingSoonMissions" class="full-width" *ngIf="stats.endingSoonMissions?.length; else noMissions">
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Mission</th>
+            <td mat-cell *matCellDef="let r">{{r.title}}</td>
+          </ng-container>
+          <ng-container matColumnDef="consultantName">
+            <th mat-header-cell *matHeaderCellDef>Consultant</th>
+            <td mat-cell *matCellDef="let r">{{r.consultantName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="clientName">
+            <th mat-header-cell *matHeaderCellDef>Client</th>
+            <td mat-cell *matCellDef="let r">{{r.clientName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef>Fin</th>
+            <td mat-cell *matCellDef="let r">{{r.endDate | date:'dd/MM/yyyy'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let r"><span class="status-chip" [class]="r.status?.toLowerCase()">{{r.status | status}}</span></td>
+          </ng-container>
           <tr mat-header-row *matHeaderRowDef="missionColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: missionColumns;"></tr>
         </table>
-        <p *ngIf="!stats.endingSoonMissions?.length" class="no-data">Aucune mission se terminant bientôt</p>
+        <ng-template #noMissions>
+          <div class="empty-state">
+            <mat-icon class="empty-icon">event_available</mat-icon>
+            <p>Aucune mission se terminant bientôt</p>
+          </div>
+        </ng-template>
       </mat-card-content>
     </mat-card>
   </div>
