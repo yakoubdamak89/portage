@@ -79,6 +79,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key:      ${{ secrets.VPS_SSH_KEY }}
           # Copy only the files needed for deployment; excludes .git, .github, etc.
+          # scripts/ includes deploy.sh, portage.service, and setup-systemd.sh
           source:   "backend,frontend,scripts,docker-compose.yml,.env.example"
           target:   "${{ secrets.VPS_DEPLOY_PATH }}"   # e.g. /home/user/portage
           rm:       false   # preserve server-side files not tracked in git (e.g. .env, uploads)
@@ -127,6 +128,22 @@ jobs:
               echo ".env written to ${ENV_FILE}"
             else
               echo "WARNING: POSTGRES_PASSWORD and/or JWT_SECRET secrets are not set – keeping existing .env (if any)."
+            fi
+
+      - name: Install systemd service (if not already installed)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host:        ${{ secrets.VPS_HOST }}
+          port:        ${{ secrets.VPS_PORT }}
+          username:    ${{ secrets.VPS_USER }}
+          key:         ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          script: |
+            if ! systemctl is-enabled portage.service &>/dev/null; then
+              echo "Installing Portage systemd service …"
+              sudo bash "${{ secrets.VPS_DEPLOY_PATH }}/scripts/setup-systemd.sh" "${{ secrets.VPS_DEPLOY_PATH }}"
+            else
+              echo "Portage systemd service is already installed."
             fi
 
       - name: Run deploy script via SSH

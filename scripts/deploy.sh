@@ -49,7 +49,16 @@ fi
 echo "[1/3] Rebuilding Docker images and restarting containers …"
 docker compose -f "${COMPOSE_FILE}" pull --ignore-pull-failures 2>&1 || \
   echo "WARNING: 'docker compose pull' encountered errors (continuing with local images)."
-docker compose -f "${COMPOSE_FILE}" up -d --build --remove-orphans
+
+# If the portage systemd service is installed, use 'systemctl reload' which
+# triggers ExecReload (docker compose up -d --build --remove-orphans).
+# Otherwise fall back to a direct docker compose command.
+if systemctl is-enabled portage.service &>/dev/null; then
+  echo "  → Reloading via systemd (portage.service) …"
+  systemctl reload portage.service
+else
+  docker compose -f "${COMPOSE_FILE}" up -d --build --remove-orphans
+fi
 
 # ── 2. Wait for the backend health check to pass ─────────────────────────────
 echo "[2/3] Waiting for backend to become healthy …"
