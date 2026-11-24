@@ -1,4 +1,4 @@
-# Portage Pro
+# Portage 
 
 Application web de gestion du portage salarial, composée d'un backend Spring Boot et d'un frontend Angular 19.
 
